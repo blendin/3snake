@@ -10,7 +10,8 @@ Reads memory from `sshd` and `sudo` system calls that handle passowrd based auth
 
 Don't really like the solution of backdooring openssh or installing a kernel module on target servers.
 
-![3snake](https://user-images.githubusercontent.com/20363764/35939498-29bed190-0c01-11e8-9e14-09516bd8ea2a.gif)
+![3snake](https://user-images.githubusercontent.com/20363764/35941544-74b2d22c-0c07-11e8-887a-474cb9b6daec.gif)
+
 
 
 
@@ -71,6 +72,7 @@ Todo
 License
 ---
 MIT
+
 
 
 
