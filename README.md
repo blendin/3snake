@@ -6,11 +6,12 @@
 
 About
 ---
-Reads memory from `sshd` and `sudo` system calls that handle passowrd based authentication. Doesn't write any memory to the 3snake process. Spawns a new process for every `sshd` and `sudo` command that is run. Uses proc event from netlink sockets to get candidate processes to trace.
+Targeting rooted servers, reads memory from `sshd` and `sudo` system calls that handle passowrd based authentication. Doesn't write any memory to the traced processes. Spawns a new process for every `sshd` and `sudo` command that is run. Uses proc event from netlink sockets to get candidate processes to trace.
 
-Don't really like the solution of backdooring openssh or installing a kernel module on target servers.
+Don't really like the solution of backdooring openssh or installing a kernel module on target servers so I made this.
 
 ![3snake](https://user-images.githubusercontent.com/20363764/35941544-74b2d22c-0c07-11e8-887a-474cb9b6daec.gif)
+
 
 
 
@@ -72,6 +73,7 @@ Todo
 License
 ---
 MIT
+
 
 
 
