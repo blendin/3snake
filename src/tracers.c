@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <string.h>
+#include <ctype.h>
 
 #define FILE_TRACERS 1
 #include "config.h"
@@ -191,4 +192,15 @@ void trace_process(pid_t traced_process) {
 
   if (tracers[type] != NULL)
     tracers[type](traced_process);
+}
+
+int strnascii(const char *string, size_t length) {
+  size_t i = 0;
+
+  for (i = 0; i < length; i++) {
+    if (!isascii(string[i]))
+      return 0;
+  }
+
+  return 1;
 }

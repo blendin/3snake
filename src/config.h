@@ -6,7 +6,6 @@
 #define ENABLE_SUDO 1
 
 //Optimization variables
-#define MAX_SYSCALL_READ 1024
 #define MAX_PASSWORD_LEN 256
 
 //Directory this process will live in if daemonized with -d

