@@ -21,11 +21,12 @@ extern char *process_name;
 extern char *process_path;
 extern char *process_username;
 
-/* This tracer is ostly a proof of concept.
+/* This tracer is mostly a proof of concept.
  * This can easily be done with a command like
  * `strace -p ${sshd_pid} -f 2>&1 | grep write`
- * Other tracers like sudo, su, and ssh client
- * are better usecases for this tool
+ * Although, strace isn't on a lot of servers by
+ * default. Other tracers like sudo, su, and ssh
+ * client are slightly better usecases for this tool
  */
 
 char *extract_write_string(pid_t traced_process, long length) {
