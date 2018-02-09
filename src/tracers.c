@@ -81,6 +81,26 @@ char *read_memory(pid_t child, unsigned long addr, long len) {
   return val;
 }
 
+char *extract_read_string(pid_t traced_process, long length) {
+  char *strval = NULL;
+  long str_ptr = 0;
+
+  str_ptr = get_syscall_arg(traced_process, 1);
+  strval = read_memory(traced_process, str_ptr, length);
+
+  return strval;
+}
+
+char *extract_write_string(pid_t traced_process, long length) {
+  char *strval = NULL;
+  long str_ptr = 0;
+
+  str_ptr = get_syscall_arg(traced_process, 1);
+  strval = read_memory(traced_process, str_ptr, length);
+
+  return strval;
+}
+
 long get_syscall_arg(pid_t child, int which) {
   switch (which) {
 #ifdef __amd64__
@@ -170,6 +190,17 @@ int get_syscall(pid_t traced_process) {
   return num;
 }
 
+int strnascii(const char *string, size_t length) {
+  size_t i = 0;
+
+  for (i = 0; i < length; i++) {
+    if (!isascii(string[i]))
+      return 0;
+  }
+
+  return 1;
+}
+
 void trace_process(pid_t traced_process) {
   enum tracer_types type = invalid_tracer;
 
@@ -194,13 +225,3 @@ void trace_process(pid_t traced_process) {
     tracers[type](traced_process);
 }
 
-int strnascii(const char *string, size_t length) {
-  size_t i = 0;
-
-  for (i = 0; i < length; i++) {
-    if (!isascii(string[i]))
-      return 0;
-  }
-
-  return 1;
-}

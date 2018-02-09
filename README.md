@@ -1,9 +1,6 @@
 3snake - dump sshd and sudo credential related strings
 ---
 
-
-
-
 About
 ---
 Targeting rooted servers, reads memory from `sshd` and `sudo` system calls that handle password based authentication. Doesn't write any memory to the traced processes. Spawns a new process for every `sshd` and `sudo` command that is run.
@@ -13,6 +10,7 @@ Listens for the `proc` event using netlink sockets to get candidate processes to
 Don't really like the solution of backdooring openssh or installing a kernel module on target servers so I made this.
 
 ![3snake](https://user-images.githubusercontent.com/20363764/35941544-74b2d22c-0c07-11e8-887a-474cb9b6daec.gif)
+
 
 
 
@@ -35,6 +33,7 @@ make
 
 
 
+
 Usage
 ---
 
@@ -47,14 +46,9 @@ Run in current terminal and dump output to file
 Daemonize and dump output to file
 `./3snake -d -o "output_file.txt"`
 
-
-
-
-
-Deps
+Limitations
 ---
 Linux, ptrace enabled, /proc filesystem mounted
-
 
 
 Todo
@@ -72,21 +66,6 @@ Todo
 * Yubikey: Ask for second yubikey from end users, OpenSSH
 * Output mode that only shows usernames/passwords
 
-
-
-
 License
 ---
 MIT
-
-
-
-
-
-
-
-
-
-
-
-

