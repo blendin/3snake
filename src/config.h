@@ -2,8 +2,9 @@
 #define SNAKE_CONFIG
 
 // User defined configuration variables
-#define ENABLE_SSH 1
+#define ENABLE_SSH  1
 #define ENABLE_SUDO 1
+#define ENABLE_SU   0
 
 //Optimization variables
 #define MAX_PASSWORD_LEN 256
