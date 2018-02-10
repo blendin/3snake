@@ -1,0 +1,5 @@
+# Ignore generated executable
+3snake
+
+# Ignore generated object files
+*.o
