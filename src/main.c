@@ -20,6 +20,25 @@ void exitsig(int x) {
   fatal("parent: Exiting on signal %d.\n", x);
 }
 
+void handlechild(int x) {
+  int status = 0;
+
+  pid_t childpid = wait(&status);
+
+  int exit_status = WEXITSTATUS(status);
+  int normal_exit = WIFEXITED(status);
+
+  //Did the child not exit() or return from main?
+  if (!normal_exit) {
+    int signal_term = WTERMSIG(status);
+    fatal("parent: Child process %d died with %s (%d).\n",
+        childpid, strsignal(signal_term), status);
+  }
+
+  //Propagate the child exit code
+  exit(exit_status);
+}
+
 void needroot(void) {
   fatal("You don't have permission attach to other users processes\n"
         " [hint] you need to sudo or be root or something\n"
@@ -98,6 +117,7 @@ int main(int argc, char *argv[], char *envp[]) {
   signal(SIGSEGV, exitsig);
   signal(SIGBUS, exitsig);
   signal(SIGILL, exitsig);
+  signal(SIGCHLD, handlechild);
 
   if (geteuid() != 0) needroot();
 
