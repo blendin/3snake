@@ -24,7 +24,7 @@ asan:
 	clang -fsanitize=address -Isrc src/tracers.c src/procinfo.c src/main.c src/su_tracer.c src/ssh_tracer.c src/sudo_tracer.c src/plisten.c -o $(ASAN)
 
 fuzz:
-	clang++ -g -fsanitize=address -fsanitize-coverage=trace-pc-guard src/fuzz/tracers_fuzzer.cc -Isrc src/procinfo.c src/tracers.c src/ssh_tracer.c src/sudo_tracer.c ${LIBFUZZER_PATH} -o $(FUZZ)
+	clang++ -g -fsanitize=address -fsanitize-coverage=trace-pc-guard src/fuzz/tracers_fuzzer.cc -Isrc src/procinfo.c src/tracers.c src/ssh_tracer.c src/sudo_tracer.c src/su_tracer.c ${LIBFUZZER_PATH} -o $(FUZZ)
 
 obfuscate:
 	${LLVM_OBFUSCATE_CLANG} -Isrc src/procinfo.c src/main.c src/plisten.c src/tracers.c src/sudo_tracer.c src/su_tracer.c src/ssh_tracer.c -o $(OBFU) -mllvm -sub -mllvm -fla -mllvm -bcf

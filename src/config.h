@@ -6,7 +6,10 @@
 #define ENABLE_SUDO 1
 #define ENABLE_SU   0
 
-//Optimization variables
+// Dump strings that are less than 5 characters from openssh server
+#define SHORT_SSH_STRINGS 0
+
+// Optimization variables
 #define MAX_PASSWORD_LEN 256
 
 //Directory this process will live in if daemonized with -d
