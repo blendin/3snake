@@ -83,7 +83,7 @@ char *get_proc_username(pid_t process) {
     return NULL;
 
   if (euid == -1) {
-    strncpy(username, "unknown", 7);
+    strncpy(username, "unknown", 8);
     return username;
   }
 
