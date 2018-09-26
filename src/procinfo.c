@@ -4,6 +4,7 @@
 #include <pwd.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #define FILE_PROCINFO 1
 #include "config.h"

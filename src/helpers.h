@@ -1,5 +1,6 @@
 #ifndef SNAKE_HELPERS
 #define SNAKE_HELPERS
+#include <time.h>
 
 #define debug(x...) fprintf(stderr,x)
 
