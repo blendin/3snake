@@ -4,6 +4,7 @@
 #include <pwd.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #define FILE_PROCINFO 1
 #include "config.h"
@@ -82,7 +83,7 @@ char *get_proc_username(pid_t process) {
     return NULL;
 
   if (euid == -1) {
-    strncpy(username, "unknown", 7);
+    strncpy(username, "unknown", 8);
     return username;
   }
 
