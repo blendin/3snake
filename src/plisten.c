@@ -100,7 +100,7 @@ int handle_proc_ev(int nl_sock) {
     switch (nlcn_msg.proc_ev.what) {
       case PROC_EVENT_EXEC:
         //Do this check here so we don't spawn a process for nothing
-        if (!ENABLE_SUDO && !ENABLE_SU)
+        if (!ENABLE_SUDO && !ENABLE_SU && !ENABLE_SSH_CLIENT)
           break;
 
         child = fork();

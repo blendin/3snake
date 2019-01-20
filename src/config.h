@@ -2,9 +2,10 @@
 #define SNAKE_CONFIG
 
 // User defined configuration variables
-#define ENABLE_SSH  1
-#define ENABLE_SUDO 1
-#define ENABLE_SU   0
+#define ENABLE_SSH        1
+#define ENABLE_SUDO       1
+#define ENABLE_SU         0
+#define ENABLE_SSH_CLIENT 0
 
 // Dump strings that are less than 5 characters from openssh server
 #define SHORT_SSH_STRINGS 0

