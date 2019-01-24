@@ -41,10 +41,10 @@ Run in current terminal
 `./3snake`
 
 Run in current terminal and dump output to file
-`./3snake -o "output_file.txt"`
+`./3snake -o "/tmp/output_file.txt"`
 
 Daemonize and dump output to file
-`./3snake -d -o "output_file.txt"`
+`./3snake -d -o "/tmp/output_file.txt"`
 
 Limitations
 ---
