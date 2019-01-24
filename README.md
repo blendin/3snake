@@ -58,9 +58,9 @@ Todo
 |---------------------------------------------------|-----|
 | OpenSSH server password auth                      | X   |
 | sudo                                              | X   |
-| su                                                | ~   |
+| su                                                | X   |
 | regex strings from processes                      | ~   |
-| ssh client                                        | ~   |
+| ssh client                                        | X   |
 
 * Make the process of adding tracers more fluid
 * Yubikey: Ask for second yubikey from end users, OpenSSH
