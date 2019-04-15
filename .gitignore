@@ -3,3 +3,5 @@
 
 # Ignore generated object files
 *.o
+
+.vscode
