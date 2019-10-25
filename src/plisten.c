@@ -182,6 +182,6 @@ void plisten(void) {
     close(nl_sock);
     fatal("set_proc_ev_listen failed\n");
   }
-  // 
+  // handle a new process event
   handle_proc_ev(nl_sock);
 }
