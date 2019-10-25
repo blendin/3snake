@@ -9,6 +9,7 @@ fprintf(stderr, "[-] ERROR: " x); \
 exit(1); \
 }\
 
+// this is sending output to stderr
 #define output(x...) { \
 fprintf(stderr, "[%s] %d %d %s\t", process_username, (int)time(0), process_pid, process_name);\
 fprintf(stderr, x);\
