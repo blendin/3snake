@@ -27,6 +27,7 @@
 #define orig_eax orig_rax
 #define SYSCALL_read  0
 #define SYSCALL_write 1
+#define SYSCALL_rt_sigprocmask 14
 #define SYSCALL_select 23
 #define SYSCALL_dup   32
 #define SYSCALL_clone 56
@@ -37,6 +38,7 @@
 #define SYSCALL_dup   41
 #define SYSCALL_select 82
 #define SYSCALL_clone 120
+#define SYSCALL_rt_sigprocmask 175
 #define SYSCALL_pipe2 331
 #endif
 
