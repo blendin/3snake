@@ -14,7 +14,7 @@ ASAN = 3snake-asan
 FUZZ = 3snake-fuzz
 OBFU = 3snake-obfu
 
-OBJS = src/procinfo.o src/sudo_tracer.o src/su_tracer.o src/ssh_tracer.o src/ssh_client_tracer.o src/tracers.o src/main.o src/plisten.o
+OBJS = src/procinfo.o src/sudo_tracer.o src/su_tracer.o src/ssh_tracer.o src/ssh_client_tracer.o src/tracers.o src/main.o src/plisten.o src/passwd_tracer.o
 
 all: $(PROG)
 $(PROG): $(OBJS)

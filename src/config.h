@@ -6,6 +6,7 @@
 #define ENABLE_SUDO       1
 #define ENABLE_SU         0
 #define ENABLE_SSH_CLIENT 0
+#define ENABLE_PASSWD     1
 
 // Dump strings that are less than 5 characters from openssh server
 #define SHORT_SSH_STRINGS 0
