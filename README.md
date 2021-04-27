@@ -45,12 +45,13 @@ Daemonize and dump output to file
 
 Configuration
 ---
-Located in [config.h](https://github.com/blendin/3snake/blob/master/src/config.h)  
-- __ROOT_DIR__ - root directory when daemonized (relative file paths for -o option will end up here)   
+Located in [config.h](https://github.com/blendin/3snake/blob/master/src/config.h)
+- __ROOT_DIR__ - root directory when daemonized (relative file paths for -o option will end up here)
 - __ENABLE_SSH__ - OpenSSH server password auth
 - __ENABLE_SUDO__ - sudo password auth
 - __ENABLE_SU__ (experimental) - su password auth
 - __ENABLE_SSH_CLIENT__ (experimental) - ssh client password auth
+- __ENABLE_PASSWD__ - `passwd` password changes
 
 Limitations
 ---

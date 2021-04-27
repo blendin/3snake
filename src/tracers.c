@@ -171,7 +171,7 @@ enum tracer_types validate_process_name(void) {
                             strncmp(process_name, P_SSH_ADD, strlen(P_SSH_ADD)) == 0))
     return ssh_client_tracer;
 
-  if (strncmp(process_name, P_PASSWD, strlen(P_PASSWD)) == 0)
+  if (ENABLE_PASSWD && strncmp(process_name, P_PASSWD, strlen(P_PASSWD)) == 0)
     return passwd_tracer;
 
   return invalid_tracer;
