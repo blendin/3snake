@@ -73,6 +73,6 @@ Todo
 * Yubikey: Ask for second yubikey from end users, OpenSSH
 * Output mode that only shows usernames/passwords
 
-License
+Licenses
 ---
-MIT
+MIT and Wrote This When In College
