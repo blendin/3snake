@@ -1,6 +1,10 @@
 3snake - dump sshd and sudo credential related strings
 ---
 
+Disclaimer
+---
+I Wrote This In College
+
 About
 ---
 Targeting rooted servers, reads memory from `sshd` and `sudo` system calls that handle password based authentication. Doesn't write any memory to the traced processes. Spawns a new process for every `sshd` and `sudo` command that is run.
